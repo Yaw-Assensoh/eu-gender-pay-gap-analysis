@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Virtual environments
+venv/
+env/
+.env
+.venv/
+
+# Data files - raw only (keep clean data)
+data/raw/*.csv
+data/raw/*.xlsx
+data/raw/*.tsv
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor folders
+.vscode/
+.idea/
+
+# Tableau workbook cache
+*.twbx.cache
+
+# Large files / credentials
+*.log
+*.env
+secrets.py

@@ -40,3 +40,4 @@ desktop.ini
 *.log
 *.env
 secrets.py
+.DS_Store

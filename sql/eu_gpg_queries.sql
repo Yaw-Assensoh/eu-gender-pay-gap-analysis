@@ -51,9 +51,9 @@ CREATE TABLE IF NOT EXISTS gpg_age (
 -- SECTION 2: LOAD DATA FROM CSV
 -- ============================================================
 --  Import/Export tool
---   \copy gpg_main    FROM '/your/path/gpg_main.csv'    CSV HEADER;
---   \copy gpg_sector  FROM '/your/path/gpg_sector.csv'  CSV HEADER;
---   \copy gpg_age     FROM '/your/path/gpg_age.csv'     CSV HEADER;
+--   \copy gpg_main    FROM 'gpg_main.csv'    CSV HEADER;
+--   \copy gpg_sector  FROM 'gpg_sector.csv'  CSV HEADER;
+--   \copy gpg_age     FROM 'gpg_age.csv'     CSV HEADER;
 
 
 -- ============================================================

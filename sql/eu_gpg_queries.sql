@@ -174,7 +174,7 @@ SELECT
     ROUND(MAX(s.gpg_pct), 1)                                AS highest_country_gap
 FROM gpg_sector s
 WHERE s.year = (SELECT MAX(year) FROM gpg_sector WHERE sector = s.sector
-                AND country = s.country)  -- most recent year per country
+                AND country = s.country)    -- most recent year per country
 GROUP BY s.sector
 ORDER BY eu_avg_sector_gap DESC;
 
@@ -229,7 +229,7 @@ ORDER BY finance_premium DESC NULLS LAST;
 
 SELECT
     a.age_group,
-    a.age_group_sort,                               -- used for correct sort order
+    a.age_group_sort,                                   a-- used for correct sort order
     ROUND(AVG(a.gpg_pct), 1)                        AS eu_avg_gap,
     ROUND(AVG(CASE WHEN a.eu_region = 'Northern' THEN a.gpg_pct END), 1) AS northern_avg,
     ROUND(AVG(CASE WHEN a.eu_region = 'Southern' THEN a.gpg_pct END), 1) AS southern_avg,
@@ -297,5 +297,5 @@ SELECT
 FROM gpg_main m
 ORDER BY m.country, m.year;
 
--- Preview the view
+   Preview the view
 SELECT * FROM v_gpg_summary WHERE year = 2024 ORDER BY overall_gap DESC;

@@ -1,0 +1,4 @@
+table,total_rows,total_columns,countries,year_min,year_max,missing_gpg_pct,flagged_rows,flagged_pct
+gpg_main,509,7,27,2002,2024,0,76,14.9
+gpg_sector,7593,8,27,2007,2024,0,1360,17.9
+gpg_age,2371,9,27,2007,2024,0,459,19.4

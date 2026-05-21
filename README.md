@@ -1,4 +1,3 @@
-# Eu-gender-pay-gap-analysis
 # EU Gender Pay Gap Analysis
 ### A Complete Data Analytics Portfolio Project
 

@@ -1,0 +1,5 @@
+Test,Question,Test used,Result,Significant,Plain English
+Linear Regression,Is the EU pay gap trend genuinely declining?,OLS regression on annual EU average,p = 0.0000,Yes,Gap falls 0.32 pp/year — trend is real
+One-Way ANOVA,Are EU regional differences significant?,ANOVA across 4 EU regions,p = 0.2708,No,Regional differences are visible but not statistically confirmed at country level
+Independent T-Test,Is Finance sector gap significantly higher?,T-test: Finance vs all other sectors,p = 0.000000,Yes,Finance gap is statistically proven to be highest
+Paired T-Test,Is the motherhood penalty statistically real?,Paired t-test: Under 25 vs 35–44 by country,p = 0.000000,Yes,Penalty of +7.3 pp at age 35-44 is statistically proven

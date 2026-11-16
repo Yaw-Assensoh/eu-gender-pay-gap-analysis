@@ -10,7 +10,7 @@ An end-to-end analytics project using official Eurostat data for all 27 EU membe
 
 ## Interactive dashboard
 
-**[Open the dashboard](https://github.com/Yaw-Assensoh/eu-gender-pay-gap-analysis/tree/main?tab=readme-ov-file)** — a year slider (2006–2024) updates the KPIs, country map, ranking, trend, sector chart and age chart together. Works on desktop and mobile.
+**[Open the dashboard](https://yaw-assensoh.github.io/eu-gender-pay-gap-analysis/dashboard/eu-gender-pay-gap-dashboard.html)** — a year slider (2006–2024) updates the KPIs, country map, ranking, trend, sector chart and age chart together. Works on desktop and mobile.
 
 ---
 

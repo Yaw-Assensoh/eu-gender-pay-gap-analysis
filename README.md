@@ -10,7 +10,7 @@ An end-to-end analytics project using official Eurostat data for all 27 EU membe
 
 ## Interactive dashboard
 
-**[Open the dashboard](dashboard/eu-gender-pay-gap-dashboard.html)** — a year slider (2006–2024) updates the KPIs, country map, ranking, trend, sector chart and age chart together. Works on desktop and mobile.
+**[Open the dashboard](eu-gender-pay-gap-dashboard.html)** — a year slider (2006–2024) updates the KPIs, country map, ranking, trend, sector chart and age chart together. Works on desktop and mobile.
 
 ---
 

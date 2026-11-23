@@ -1,18 +1,5 @@
 # EU Gender Pay Gap Analysis
 
-**Where is the gender pay gap largest across the EU, is it closing, and what is it associated with?**
-
-An end-to-end analytics project using official Eurostat data for all 27 EU member states (2006–2024), built with Python, PostgreSQL, Excel and an interactive dashboard.
-
-**Author:** Yaw Assensoh · **Portfolio:** [yaw-assensoh.github.io](https://yaw-assensoh.github.io/portfolio/index.html#home)
-
----
-
-## Interactive dashboard
-
-**[Open the dashboard](https://yaw-assensoh.github.io/eu-gender-pay-gap-analysis/dashboard/eu-gender-pay-gap-dashboard.html)** — a year slider (2006–2024) updates the KPIs, country map, ranking, trend, sector chart and age chart together. Works on desktop and mobile.
-# EU Gender Pay Gap Analysis
-
 **Is the EU gender pay gap closing, and where does it stay large?**
 
 Eurostat data for 27 EU countries, 2006 to 2024. Python, PostgreSQL, Excel and an interactive dashboard.

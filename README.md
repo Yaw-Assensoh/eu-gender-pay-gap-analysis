@@ -11,97 +11,78 @@ An end-to-end analytics project using official Eurostat data for all 27 EU membe
 ## Interactive dashboard
 
 **[Open the dashboard](https://yaw-assensoh.github.io/eu-gender-pay-gap-analysis/dashboard/eu-gender-pay-gap-dashboard.html)** — a year slider (2006–2024) updates the KPIs, country map, ranking, trend, sector chart and age chart together. Works on desktop and mobile.
+# EU Gender Pay Gap Analysis
+
+**Is the EU gender pay gap closing, and where does it stay large?**
+
+Eurostat data for 27 EU countries, 2006 to 2024. Python, PostgreSQL, Excel and an interactive dashboard.
+
+**Live dashboard:** [open it here](https://yaw-assensoh.github.io/eu-gender-pay-gap-analysis/dashboard/eu-gender-pay-gap-dashboard.html) (file: `dashboard/eu-gender-pay-gap-dashboard.html`)
+**Case study:** [portfolio write-up](https://yaw-assensoh.github.io/portfolio/projects/eu-gender-pay-gap.html)
+**Author:** Yaw Assensoh Opoku, Hamburg
 
 ---
 
-## Business question
+## My view
 
-The headline EU pay gap hides large differences between countries, industries and age groups. This project asks:
-
-1. Is the gap closing, and how fast?
-2. Which countries and industries have the largest gaps?
-3. How does the gap change with age?
-4. Does region explain differences between countries?
-
----
+Stop watching the EU average. At 10.5% it reads as one problem. It is two: countries run from -0.8% (Luxembourg) to 18.8% (Estonia), and finance sits at 24.1% while every other sector averages 9.8%. I would start with finance. I would not use this data to explain the age pattern, and I dropped the regression as evidence (see Limitations).
 
 ## Key findings
 
 | # | Finding | Evidence |
 |---|---|---|
-| 1 | **The gap is closing at about 0.33 percentage points a year.** The EU average fell from 16.1% (2006) to 10.5% (2024). The pace was faster after 2015 (−0.45 pp/yr) than in 2006–2015 (−0.25 pp/yr). At a straight-line pace it would reach zero around 2056; real progress rarely follows a straight line. | Linear regression, p < 0.001, R² = 0.92 |
-| 2 | **Country differences are large.** 15 of 27 countries are above the EU average in 2024. Estonia is highest (18.8%), Luxembourg lowest (−0.8%). Estonia and Poland (4.0%) are both Eastern European, so region alone does not explain the gap. The largest improvement since 2006 is the Netherlands (−12.4 pp). | Descriptive analysis |
-| 3 | **Finance & insurance has the highest sector-level gap.** It averages 24.1% across countries, against 9.8% for all other sectors combined. | Independent t-test, p < 0.0001 |
-| 4 | **The gap is larger for workers aged 35–44 than for under-25s.** Comparing each country with itself, it rises from 3.9% to 11.2% (latest year per country, 27 countries). This is an association with age; the analysis does not identify its cause. | Paired t-test, p < 0.001 |
-| 5 | **The regression cannot tell us how much of the gap is unexplained.** The full model (sector gaps, age gaps, region) reaches R² = 0.99 on 25 countries, but it uses 15 predictors for 25 observations, and sector and age gaps are components of the overall gap, so a near-perfect fit is expected and says little. Region alone explains little (R² = 0.15, p = 0.27). | OLS regression (Notebook 07) |
-
----
+| 1 | **The gap is closing at 0.33 points a year.** The EU average fell from 16.1% (2006) to 10.5% (2024). The pace was 0.25 points a year through 2015 and 0.45 after. At 0.45, zero is 23 years away. | Linear regression, R² 0.92, p < 0.001 |
+| 2 | **Country gaps span almost 20 points, and region does not explain them.** 15 of 27 countries sit above the average. Estonia and Poland (4.0%) are both Eastern European. The Netherlands cut its gap most since 2006 (-12.4 points). | ANOVA by region, p = 0.27 |
+| 3 | **Finance and insurance averages 24.1%.** All other sectors combined average 9.8%, a difference of 14.3 points. | Independent t-test, p < 0.0001 |
+| 4 | **The gap nearly triples from under 25 (3.9%) to 35-44 (11.2%).** Each country is compared with itself. After 45 the regions split: Eastern Europe falls back while Southern and Western Europe keep rising. The data cannot say why. | Paired t-test, p < 0.001, 27 countries |
 
 ## Data
 
-All data comes from [Eurostat](https://ec.europa.eu/eurostat), the EU's statistical office.
+All data comes from [Eurostat](https://ec.europa.eu/eurostat).
 
-| Dataset | Eurostat code | Contents |
+| Dataset | Code | Contents |
 |---|---|---|
-| Headline gap | [`sdg_05_20`](https://ec.europa.eu/eurostat/databrowser/product/view/SDG_05_20) | Unadjusted gender pay gap (%) by country and year |
-| By sector | [`earn_gr_gpgr2`](https://ec.europa.eu/eurostat/databrowser/product/view/earn_gr_gpgr2) | Gap across 18 NACE industry sectors |
-| By age | [`earn_gr_gpgr2ag`](https://ec.europa.eu/eurostat/databrowser/product/view/earn_gr_gpgr2ag) | Gap across 6 age groups |
+| Headline gap | [`sdg_05_20`](https://ec.europa.eu/eurostat/databrowser/product/view/SDG_05_20) | Unadjusted gap (%) by country and year |
+| By sector | [`earn_gr_gpgr2`](https://ec.europa.eu/eurostat/databrowser/product/view/earn_gr_gpgr2) | 18 industry sectors |
+| By age | [`earn_gr_gpgr2ag`](https://ec.europa.eu/eurostat/databrowser/product/view/earn_gr_gpgr2ag) | 6 age groups |
 
-The gender pay gap is the difference between men's and women's average gross hourly earnings, as a percentage of men's earnings.
+The gap is the difference between men's and women's average gross hourly earnings, as a percentage of men's earnings. EU averages here are unweighted: each country counts once. Eurostat's weighted EU figure for 2024 is 11.1%, against 10.5% here.
 
-**Averaging note:** EU averages here are *unweighted* — each country counts equally. Eurostat's published EU figure is weighted by workforce size (11.1% for 2024, against 10.5% here). Both are valid; equal weighting suits country-level comparison.
+## Method
 
----
+1. **Clean (Python):** keep the 27 EU countries, remove aggregate sector rows that double-count, decode quality flags, add an `eu_region` column. Notebook `00` rebuilds the clean files from the raw downloads.
+2. **Query (PostgreSQL):** seven business questions with window functions, CTEs and `CASE` logic.
+3. **Analyse (Python):** seven notebooks cover the audit, exploration, trends, sectors, age, statistical tests and a regression.
+4. **Communicate:** an Excel workbook and the interactive dashboard.
 
-## Methodology
-
-1. **Clean (Python/pandas):** kept EU-27 countries only, removed aggregate sector rows that double-count, decoded Eurostat quality flags, and added an `eu_region` column (Northern / Southern / Eastern / Western).
-2. **Query (PostgreSQL):** loaded the clean tables and answered seven business questions using window functions, CTEs and `CASE` logic.
-3. **Explore and test (Python):** seven notebooks cover data audit, EDA, trends, sector and age analysis, statistical tests and a regression model.
-4. **Communicate:** an Excel workbook for non-technical readers and the interactive dashboard.
-
-Each notebook explains every step in plain language before the code and states the finding after each chart.
-
----
-
-## Repository structure
+## Repository
 
 ```
-eu-gender-pay-gap-analysis/
-├── data/clean/             gpg_main.csv · gpg_sector.csv · gpg_age.csv
-├── data/raw/               original Eurostat downloads (add these first)
-├── notebooks/              eu_gpg_00 … eu_gpg_07 (.ipynb)
-├── sql/                    eu_gpg_queries.sql · images/ (query screenshots)
-├── excel/                  EU_GPG_Analysis.xlsx
-├── dashboard/              eu-gender-pay-gap-dashboard.html
-├── reports/                data_quality_report.csv · statistical_test_results.csv · figures/
-├── requirements.txt
-└── README.md
+data/raw/        original Eurostat downloads (download these first)
+data/clean/      gpg_main.csv, gpg_sector.csv, gpg_age.csv
+notebooks/       eu_gpg_00 to eu_gpg_07
+sql/             eu_gpg_queries.sql and result screenshots
+excel/           EU_GPG_Analysis.xlsx
+dashboard/       eu-gender-pay-gap-dashboard.html
+reports/         figures and test results
 ```
 
 | Notebook | Purpose |
 |---|---|
-| `00_clean_data` | Raw Eurostat files → clean tables |
-| `01_data_audit` | Missing values, quality flags, coverage |
-| `02_eda` | Distributions, outliers, regional patterns |
-| `03_trends` | Change over time and rate of progress |
-| `04_sector_analysis` | Industry-level gaps |
+| `00_clean_data` | Raw Eurostat files to clean tables |
+| `01_data_audit` | Missing values, flags, coverage |
+| `02_eda` | Distributions and regional patterns |
+| `03_trends` | Change over time and pace of progress |
+| `04_sector_analysis` | Industry gaps |
 | `05_age_analysis` | Gap by age group |
 | `06_statistical_tests` | Regression, ANOVA, t-tests |
-| `07_regression` | OLS model with sector, age and region |
-
----
+| `07_regression` | OLS model, and why it is not used as evidence |
 
 ## Limitations
 
-- **Aggregate data.** Eurostat publishes country-level averages here, not individual records. The regression therefore describes differences between countries, not between individual workers.
-- **Small sample for group comparisons.** With 27 countries (6–8 per region), regional tests have limited statistical power. The ANOVA result should be read with that in mind.
-- **Association, not causation.** The age and sector patterns are statistically significant associations. The data cannot show why they occur.
-- **Missing years.** Some countries lack data for some years; these are left blank, not estimated. Sector and age series start in 2007.
-- **Regression is descriptive only.** With 27 countries and predictors that overlap with the outcome, the OLS model is overfitted and should not be read as measuring an "adjusted" gap.
-- **Unadjusted gap.** The headline gap does not control for hours, occupation or experience.
-
-## Future work
-
-- Use Eurostat's Structure of Earnings Survey microdata to calculate an individual-level adjusted gap controlling for occupation, education and contract type.
-- Test whether national pay-transparency laws changed the trend, once post-2026 data is available.
+- **Country averages, not individual records.** The data cannot measure an adjusted gap.
+- **The regression is not evidence.** It uses 15 predictors for 25 countries, and its sector and age gaps are parts of the overall gap, so it fits almost perfectly and shows nothing. Region alone gives R² 0.15 (p = 0.27).
+- **Association only.** The age and sector patterns are statistically significant. The data has no parenthood or working-hours variables, so it cannot give a cause.
+- **Small groups.** Each region has 6 to 8 countries, which limits regional tests.
+- **Missing years.** Gaps are left blank, never estimated. Sector and age series start in 2007.
+- **The t-test is generous.** It treats each country-sector value as independent, though the same countries appear in every sector. The 14.3-point difference is large enough that the result holds.

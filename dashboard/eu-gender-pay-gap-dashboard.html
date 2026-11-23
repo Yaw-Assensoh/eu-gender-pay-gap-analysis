@@ -152,6 +152,7 @@ footer code{font-family:ui-monospace,monospace;font-size:11px}
 <main class="w" id="main">
  <section class="kpi" id="kpis" aria-label="Selected year summary" aria-live="polite"></section>
  <div class="insight" id="insight" aria-live="polite"></div>
+ <div class="insight"><strong>My view.</strong> Stop watching the average. At 10.5% in 2024 it reads as one problem. It is two. Countries run from -0.8% (Luxembourg) to 18.8% (Estonia), and finance sits at 24.1% while every other sector averages 9.8%. I would start with finance: its gap is about 2.5 times the rest.</div>
 
  <div class="grid">
   <section class="panel" aria-labelledby="mapTitle">
@@ -218,17 +219,12 @@ footer code{font-family:ui-monospace,monospace;font-size:11px}
  </section>
  <footer>
   <strong>Data sources:</strong>
-  Eurostat datasets
-  <a href="https://ec.europa.eu/eurostat/databrowser/view/sdg_05_20/" target="_blank" rel="noopener noreferrer"><code>sdg_05_20</code></a>,
-  <a href="https://ec.europa.eu/eurostat/databrowser/view/earn_gr_gpgr2/" target="_blank" rel="noopener noreferrer"><code>earn_gr_gpgr2</code></a> and
-  <a href="https://ec.europa.eu/eurostat/databrowser/view/earn_gr_gpgr2ag/" target="_blank" rel="noopener noreferrer"><code>earn_gr_gpgr2ag</code></a>,
-  as cited in the original project. The original file states that the data were retrieved in 2025; the embedded values have not been independently refreshed in this revision.
+  Eurostat datasets <code>sdg_05_20</code>, <code>earn_gr_gpgr2</code> and <code>earn_gr_gpgr2ag</code>, as cited in the original project. The original file states that the data were retrieved in 2025; the embedded values have not been independently refreshed in this revision.
   <br>
   <strong>Calculation:</strong> unweighted arithmetic means of non-missing values. Country, sector and age-group series are kept separate.
   <br>
   <strong>Analysis by Yaw Assensoh.</strong>
-  <a href="https://github.com/Yaw-Assensoh/Eu-gender-pay-gap-analysis" target="_blank" rel="noopener noreferrer">View project source code on GitHub</a> ·
-  <a href="https://yaw-assensoh.github.io/portfolio/" target="_blank" rel="noopener noreferrer">Portfolio</a>.
+  <a href="https://github.com/Yaw-Assensoh/Eu-gender-pay-gap-analysis" target="_blank" rel="noopener noreferrer">View project source code on GitHub</a>.
  </footer>
 </main>
 <button id="backTop" type="button" aria-label="Back to top">↑</button>
@@ -349,7 +345,7 @@ function draw(){
   const bg=available?colourDelta(delta):"transparent";
   const fg=available?textColour(delta):"var(--ink)";
   const title=available?`${country.n}: ${fmt(value)}; ${signed(delta)} relative to country mean`:`${country.n}: no observation for ${year}`;
-  return `<div class="tile" tabindex="0" role="img" aria-label="${escapeHtml(title)}" title="${escapeHtml(title)}" style="grid-column:${col+1};grid-row:${row+1};background:${bg};color:${fg};${available?"":"border:1px dashed var(--line)"}">${code}<small>${available?value.toFixed(1):"n/a"}</small></div>`;
+  return `<div class="tile" role="img" aria-label="${escapeHtml(title)}" title="${escapeHtml(title)}" style="grid-column:${col+1};grid-row:${row+1};background:${bg};color:${fg};${available?"":"border:1px dashed var(--line)"}">${code}<small>${available?value.toFixed(1):"n/a"}</small></div>`;
  }).join("");
 
  renderBars("ranking",sorted.map(d=>({name:d.name,value:d.value})),countryMean,30,"country mean");
@@ -368,24 +364,12 @@ function draw(){
  $("ageLabels").innerHTML=ageRows.map(d=>`<span>${d.name==="Under 25"?"Under<br>25":d.name.replace("-","–")}</span>`).join("");
  const ageMax=validAges.reduce((a,b)=>a.value>b.value?a:b,null);
  const ageMin=validAges.reduce((a,b)=>a.value<b.value?a:b,null);
- const ageUnder=validAges.find(d=>d.name==="Under 25");
- const age35to54=validAges.filter(d=>d.name==="35-44"||d.name==="45-54");
- const age65=validAges.find(d=>d.name==="65+");
- if(ageUnder && age35to54.length === 2 && age65){
-  const mid = (age35to54[0].value + age35to54[1].value) / 2;
-  $("ageLead").innerHTML = `The gap rises from ${fmt(ageUnder.value)} in <em>Under 25</em> to around ${mid.toFixed(1)}% in the <em>35–54</em> bands, then eases to ${fmt(age65.value)} at <em>65+</em> — the shape repeats across most years shown.`;
- } else if(validAges.length){
-  $("ageLead").innerHTML = `In <em>${year}</em>, the highest displayed age-group value is ${escapeHtml(ageMax.name)} (${fmt(ageMax.value)}); the lowest is ${escapeHtml(ageMin.name)} (${fmt(ageMin.value)}).`;
- } else {
-  $("ageLead").innerHTML = `No age-group observations are available for ${year}.`;
- }
+ $("ageLead").innerHTML=validAges.length?`In <em>${year}</em>, the highest displayed age-group value is ${escapeHtml(ageMax.name)} (${fmt(ageMax.value)}), while the lowest is ${escapeHtml(ageMin.name)} (${fmt(ageMin.value)}).`:`No age-group observations are available for ${year}.`;
 
- $("countryFinding").textContent=`In ${year}, the range spans ${(highest.value-lowest.value).toFixed(1)} percentage points, from ${lowest.name} (${fmt(lowest.value)}) to ${highest.name} (${fmt(highest.value)}), across ${countryRows.length} countries with data.`;
- $("sectorFinding").textContent=sectorRows.length?`The widest displayed sector is ${sectorRows[0].name} (${fmt(sectorRows[0].value)}); the narrowest is ${sectorRows[sectorRows.length-1].name} (${fmt(sectorRows[sectorRows.length-1].value)}). The mean across the ${sectorRows.length} available sectors is ${fmt(sectorMean)}. This is a descriptive sector average, not the country-level EU figure shown elsewhere.`:"No sector observations are available for this year.";
- $("ageFinding").textContent=validAges.length?`Values range from ${ageMin.name} (${fmt(ageMin.value)}) to ${ageMax.name} (${fmt(ageMax.value)}). Across the years shown, the under-25 band sits consistently below the 35–54 bands, which sit above the 65+ band — a stable pattern, not a one-year artefact.`:"No age-group observations are available for this year.";
- const earliestYear=years.find(y=>Object.values(D.c).some(c=>Number.isFinite(c.v[years.indexOf(y)])));
- const earliestCount=earliestYear?Object.values(D.c).filter(c=>Number.isFinite(c.v[years.indexOf(earliestYear)])).length:0;
- $("coverageFinding").textContent=`${countryRows.length} of 27 country series contain a value in ${year}${earliestYear && earliestYear !== year ? ` (vs ${earliestCount} in ${earliestYear})` : ""}. Because the set of reporting countries changes, year-on-year comparisons of the mean should be read with that coverage difference in mind.`;
+ $("countryFinding").textContent=`The range in ${year} runs from ${lowest.name} (${fmt(lowest.value)}) to ${highest.name} (${fmt(highest.value)}), among ${countryRows.length} countries with available observations.`;
+ $("sectorFinding").textContent=sectorRows.length?`The highest displayed sector is ${sectorRows[0].name} (${fmt(sectorRows[0].value)}). The mean across ${sectorRows.length} available sector values is ${fmt(sectorMean)}. This is a descriptive sector average, not a country-level EU average.`:"No sector observations are available for this year.";
+ $("ageFinding").textContent=validAges.length?`The values range from ${ageMin.name} (${fmt(ageMin.value)}) to ${ageMax.name} (${fmt(ageMax.value)}). The chart describes differences between the supplied age groups; it does not explain their causes.`:"No age-group observations are available for this year.";
+ $("coverageFinding").textContent=`${countryRows.length} of 27 country series contain a value in ${year}. The number of reporting countries may change over time, so comparisons between annual means should be interpreted with that coverage difference in mind.`;
 
  drawTrend(index);
 }
